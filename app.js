@@ -44,24 +44,45 @@ app.get("/", (_req, res) => {
 app.get('/posts/:id', (req, res) => {
   const id = req.params.id;
   const post = postBank.find(id);
+  if (!post.id) {
+    const html = `<!DOCTYPE html>
+<html>
+<head>
+  <title>Wizard News</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div class="news-list">
+    <header><img src="/logo.png"/>404: Page Not Found</header>
+    <h1>404: Page Not Found</h1>
+    <span>404: Page Not Found</span>
+    <p>404: Page Not Found</p>
+  </div>
+</body>
+</html>`
 
-  const html = `<!DOCTYPE html>
-  <html>
-  <head>
-    <title>Wizard News</title>
-    <link rel="stylesheet" href="/style.css" />
-  </head>
-  <body>
-    <div class="news-list">
-      <header><img src="/logo.png"/>Wizard News</header>
-      <h1>${post.title}</h1>
-      <span>By (${post.name})</span>
-      <p>${post.content}</p>
-    </div>
-  </body>
-  </html>`
+    res.send(html);
+  } else {
 
-  res.send(html);
+    const html = `<!DOCTYPE html>
+<html>
+<head>
+  <title>Wizard News</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div class="news-list">
+    <header><img src="/logo.png"/>Wizard News</header>
+    <h1>${post.title}</h1>
+    <span>By (${post.name})</span>
+    <p>${post.content}</p>
+  </div>
+</body>
+</html>`
+
+    res.send(html);
+  }
+
 })
 
 const PORT = 1337;
