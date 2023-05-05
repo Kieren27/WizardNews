@@ -12,8 +12,8 @@ app.use(morgan('dev'));
 app.get("/", (_req, res) => {
   const posts = postBank.list();
 
-  const html = 
-  `<!DOCTYPE html>
+  const html =
+    `<!DOCTYPE html>
   <html>
   <head>
     <title>Wizard News</title>
@@ -26,14 +26,14 @@ app.get("/", (_req, res) => {
         <div class='news-item'>
           <p>
             <span class="news-position">${post.id}. ▲</span>
-            ${post.title}
+            <a href="/posts/${post.id}">${post.title}</a>
             <small>(by ${post.name})</small>
           </p>
           <small class="news-info">
             ${post.upvotes} upvotes | ${post.date}
           </small>
         </div>`
-      ).join('')}
+    ).join('')}
     </div>
   </body>
 </html>`
@@ -44,7 +44,24 @@ app.get("/", (_req, res) => {
 app.get('/posts/:id', (req, res) => {
   const id = req.params.id;
   const post = postBank.find(id);
-  res.send(post);
+
+  const html = `<!DOCTYPE html>
+  <html>
+  <head>
+    <title>Wizard News</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <header><img src="/logo.png"/>Wizard News</header>
+    <div>
+      <h1>${post.title}</h1>
+      <span>By (${post.name})</span>
+      <p>${post.content}</p>
+    </div>
+  </body>
+  </html>`
+
+  res.send(html);
 })
 
 const PORT = 1337;
